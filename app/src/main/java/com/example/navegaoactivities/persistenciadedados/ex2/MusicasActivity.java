@@ -40,48 +40,6 @@ public class MusicasActivity extends AppCompatActivity {
         txtTitulo = findViewById( R.id.txtTitulo );
         listaMusicas = findViewById( R.id.listaMusicas );
         btnAdiciona = findViewById( R.id.btnAdicionarMusica);
-        btnAdiciona.setOnClickListener( new EscutadorAdiciona() );
-
-        // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase( "artistasmusicas", MODE_PRIVATE, null );
-        // Recuperando o objeto Intent que criou esta activity
-        Intent i = getIntent();
-        // Recuperando o ID do artista
-        idArtista = i.getIntExtra("id",0);
-        // Recuperando o nome do artista
-        lblArtista.setText( i.getStringExtra("nome") );
-
-        // Criando cursor com os dados vindos do banco
-        String cmd = "SELECT _rowid_ _id, titulo FROM musicas WHERE idArtista = " + idArtista;
-        cursorMusicas = bd.rawQuery( cmd, null );
-        // Criando o objeto adapter, passando o cursor
-        adapterMusicas = new AdapterMusicas( this, cursorMusicas );
-        // Associando o adapter a lista de artistas
-        listaMusicas.setAdapter(adapterMusicas);
     }
 
-    // Classe interna, escutador do botão Adiciona
-    private class EscutadorAdiciona implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            // Variável para pegar o titulo da música
-            String titulo;
-            // Pegando os dados na interface
-            titulo = txtTitulo.getText().toString();
-            // Montando SQL para inserir dados
-            String cmd = "INSERT INTO musicas (idArtista, titulo) VALUES (";
-            cmd = cmd + idArtista;
-            cmd = cmd + ", '";
-            cmd = cmd + titulo;
-            cmd = cmd + "')";
-            // Rxecutando comando
-            bd.execSQL( cmd );
-            // Limpando a interface
-            txtTitulo.setText("");
-            // Renovando o cursor do adapter, já que temos novos dados no bd
-            cmd = "SELECT _rowid_ _id, titulo FROM musicas WHERE idArtista = " + idArtista;
-            cursorMusicas = bd.rawQuery( cmd, null );
-            adapterMusicas.changeCursor(cursorMusicas);
-        }
-    }
 }

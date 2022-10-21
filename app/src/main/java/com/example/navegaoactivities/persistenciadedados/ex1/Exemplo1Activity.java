@@ -39,49 +39,6 @@ public class Exemplo1Activity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         lista = findViewById(R.id.lista);
         btnInsere = findViewById(R.id.btnInserir);
-        btnInsere.setOnClickListener(new EscutadorInserir());
-
-        // Abrindo ou criando o banco de dados
-        bd = openOrCreateDatabase("exemplo1", MODE_PRIVATE, null);
-        // String para comandos SQL
-        String cmd;
-        // Criar a tabela, se a mesma não existir
-        cmd = "CREATE TABLE IF NOT EXISTS contatos (nome VARCHAR, email VARCHAR)";
-        // Executa comando no bd
-        bd.execSQL( cmd );
-
-        // Consulta para gerar o Cursor
-        cursor = bd.rawQuery("SELECT _rowid_ _id, nome, email FROM contatos", null);
-        // Criar o adapter, passando o contexto e o cursor
-        adapter = new ContatosAdapter(this, cursor);
-        // Associar a lista com o adapter criado
-        lista.setAdapter(adapter);
-    }
-
-    // classe interna, escutador do botão Inserir
-    private class EscutadorInserir implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            // Variáveis para pegar os dados
-            String nome, email;
-            // Pegando os dados na interface
-            nome = txtNome.getText().toString();
-            email = txtEmail.getText().toString();
-            // Montando SQL para inserir dados
-            String cmd = "INSERT INTO contatos (nome, email) VALUES ('";
-            cmd = cmd + nome;
-            cmd = cmd + "', '";
-            cmd = cmd + email;
-            cmd = cmd + "')";
-            // Executando comando
-            bd.execSQL( cmd );
-            // Limpando a interface
-            txtNome.setText("");
-            txtEmail.setText("");
-            // Trocando o cursor do adapter
-            cursor = bd.rawQuery( "SELECT _rowid_ _id, nome, email FROM contatos", null );
-            adapter.changeCursor(cursor);
-        }
     }
 
 }
